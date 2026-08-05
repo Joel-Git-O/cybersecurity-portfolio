@@ -34,10 +34,10 @@
 
 ```
 cybersecurity-portfolio/
-|- home-lab/         Home lab setup, SIEM configuration, network architecture
-|- security-tools/   Python scripts for threat detection and security analysis
-|- automation/       Automation scripts for security monitoring workflows
-|- write-ups/        Lab write-ups, CTF notes, LinkedIn articles
+|- home-lab/        Home lab setup, SIEM configuration, network architecture
+|- security-tools/  Python scripts for threat detection and security analysis
+|- automation/      Automation scripts for security monitoring workflows
+|- write-ups/       Lab write-ups, CTF notes, LinkedIn articles
 ```
 
 ---
@@ -45,33 +45,49 @@ cybersecurity-portfolio/
 ## Home Lab
 
 **Architecture:**
-- Red Team (Attack): Kali Linux with Nmap, Metasploit, Wireshark
-- Blue Team (Defense): Linux Mint with Splunk SIEM (in progress), log monitoring
-- Network isolation: VMware/VirtualBox host-only network between machines
+- Red Team (Attack): Kali Linux -- Kali-Offense-Project1, 192.168.153.128 -- Nmap, Metasploit, Wireshark
+- Blue Team (Defense): Linux Mint -- Mint-Target-Project1, 192.168.153.129 -- Splunk Enterprise 10.4.1, UFW
+- Network isolation: VMware host-only network, no external route, clean lab environment
 
-**Current exercises:**
+**Completed exercises:**
 - Network reconnaissance with Nmap (complete)
-- SIEM setup and log ingestion with Splunk on Linux Mint (in progress)
-- Traffic capture and analysis with Wireshark
+- Splunk Enterprise 10.4.1 install and /var/log ingestion -- 76,234 events ingested (complete - Aug 4, 2026)
+- Nmap -sV service version detection from Kali, detected via UFW and Splunk -- 10 UFW BLOCK events isolated (complete - Aug 4, 2026)
+
+**SPL query used for Nmap detection:**
+```
+source="/var/log/kern.log" host="joel-virtual-machine" "UFW BLOCK" SRC=192.168.153.128
+```
+
+**Queued next exercises:**
+- Metasploit exploitation attempt -- detect in Splunk
+- Custom SPL alert rules triggering on attacker behavior
+- Firewall rule hardening
+- Packet capture and analysis with Wireshark
+
+---
+
+## Published Work
+
+| Article | Platform | Date |
+|---|---|---|
+| [How I Detected a Network Attack in My Home Lab Using Splunk and Nmap](https://www.linkedin.com/pulse/how-i-detected-network-attack-my-home-lab-using-splunk-joel-massicot-uwoce/) | LinkedIn Pulse | Aug 5, 2026 |
 
 ---
 
 ## Skills
 
 - **Frameworks:** NIST CSF, CIS Controls, OWASP
-- **Tools:** Wireshark, Nmap, Metasploit, Splunk (in progress)
-- **Languages:** Python, Bash
-- **Platforms:** Linux (Kali, Ubuntu/Mint), Windows
-- **Concepts:** Threat detection, log analysis, network security, vulnerability assessment
+- **SIEM:** Splunk Enterprise (log ingestion, SPL queries, threat detection)
+- **Tools:** Nmap, Metasploit, Wireshark, UFW, Splunk
+- **Languages:** Python (in progress), Bash
+- **Platforms:** Linux (Kali, Mint), VMware, Windows
+- **Concepts:** Network reconnaissance, log analysis, threat detection, incident response fundamentals
 
 ---
 
-## Contact
+## Connect
 
-- **LinkedIn:** [Joel Massicot](https://www.linkedin.com/in/joel-massicot-07301a2bb/)
-- **Location:** Breda, Netherlands (US/EU work authorization)
-- **Email:** joel.massicot@zohomail.eu
-
----
-
-*Building toward Security+ certification and a SOC Analyst or Cybersecurity role in the Netherlands.*
+- LinkedIn: [Joel Massicot](https://www.linkedin.com/in/joelmassicot/)
+- Location: Breda, Netherlands
+- Work authorization: US and EU
