@@ -2,24 +2,26 @@
 
 ## Architecture Overview
 
-**Red Team (Attack Machine):** Kali Linux
+**Red Team (Attack Machine):** Kali Linux -- Kali-Offense-Project1
+- IP: 192.168.153.128
 - Role: Network scanning, traffic generation, simulated attacks
 - Tools installed: Nmap, Metasploit, Wireshark, Netcat
 
-**Blue Team (Defense Machine):** Linux Mint
-- Role: Log monitoring, traffic detection, SIEM (Splunk in progress)
-- Tools installed: Wireshark, tcpdump
+**Blue Team (Defense Machine):** Linux Mint -- Mint-Target-Project1
+- IP: 192.168.153.129
+- Role: Log monitoring, traffic detection, SIEM
+- Tools installed: Splunk Enterprise 10.4.1, UFW, Wireshark, tcpdump
 
-**Hypervisor:** VMware / VirtualBox
+**Hypervisor:** VMware
 **Network isolation:** Host-only network between VMs (no external internet exposure)
 
 ---
 
 ## Network Configuration
 
-- Host-only network segment: 192.168.56.0/24
-- Kali Linux (attacker): 192.168.56.101
-- Linux Mint (defender): 192.168.56.102
+- Host-only network segment: 192.168.153.0/24
+- Kali Linux (attacker): 192.168.153.128
+- Linux Mint (defender): 192.168.153.129
 - Network traffic stays contained within hypervisor -- no risk to external networks
 
 ---
@@ -33,13 +35,13 @@
 Commands used:
 ```bash
 # Host discovery
-nmap -sn 192.168.56.0/24
+nmap -sn 192.168.153.0/24
 
 # Service version scan
-nmap -sV 192.168.56.102
+nmap -sV 192.168.153.129
 
 # OS detection + scripts
-nmap -A 192.168.56.102
+nmap -A 192.168.153.129
 ```
 
 **Results:** Successfully identified open ports and services on the Linux Mint VM.
@@ -47,28 +49,62 @@ nmap -A 192.168.56.102
 
 ---
 
-## In Progress
+### Exercise 2 - Splunk SIEM Install and Log Ingestion
+**Date:** August 4, 2026
+**Status:** Complete
 
-### SIEM Setup with Splunk on Linux Mint
-- Install Splunk Free (single-instance) on Linux Mint
-- Configure Splunk to ingest Linux system logs (/var/log/syslog, /var/log/auth.log)
-- Generate network traffic from Kali (Nmap scans, ping sweeps)
-- Create Splunk dashboards to detect and visualize the traffic
-- Document findings as a LinkedIn article
+- Installed Splunk Enterprise 10.4.1 on Mint-Target-Project1 (localhost:8000)
+- Configured /var/log directory monitor data input (recursive)
+- 76,234 events ingested and confirmed in Search dashboard
 
-**Next step:** Download Splunk Free from splunk.com, install on Linux Mint, configure log forwarding
+```
+source="/var/log/*" host="joel-virtual-machine"
+```
+
+**Lesson:** Raw log volume is high. Filtering and focused SPL queries are what turn noise into signal.
+
+---
+
+### Exercise 3 - Nmap Attack Detection via UFW and Splunk
+**Date:** August 4, 2026
+**Status:** Complete
+
+- Ran `nmap -sV 192.168.153.129` from Kali-Offense-Project1
+- UFW on Linux Mint logged all blocked port probes to /var/log/kern.log
+- Broad Splunk search returned 56 events in the scan window
+- Focused SPL query isolated 10 clean UFW BLOCK entries pointing to the attacker IP
+
+**SPL query used:**
+```
+source="/var/log/kern.log" host="joel-virtual-machine" "UFW BLOCK" SRC=192.168.153.128
+```
+
+**Lesson:** A SIEM without focused queries is just storage. The value is in knowing what to look for and writing the query that surfaces it.
+
+**Published write-up:** [How I Detected a Network Attack in My Home Lab Using Splunk and Nmap](https://www.linkedin.com/pulse/how-i-detected-network-attack-my-home-lab-using-splunk-joel-massicot-uwoce/) -- LinkedIn Pulse, Aug 5, 2026
+
+---
+
+## Queued Next Exercises
+
+- Metasploit exploitation attempt -- detect in Splunk
+- Custom SPL alert rules triggering on specific attacker behaviors
+- Firewall rule hardening
+- Packet capture and analysis with Wireshark
+- Vulnerability scan with OpenVAS
 
 ---
 
 ## Tools Reference
 
-| Tool | Machine | Purpose |
-|---|---|---|
-| Nmap | Kali | Network scanning, host discovery, port enumeration |
-| Metasploit | Kali | Exploitation framework (learning/lab use only) |
-| Wireshark | Both | Packet capture and traffic analysis |
-| Splunk | Linux Mint | SIEM - log aggregation and threat detection (in progress) |
-| tcpdump | Linux Mint | Command-line packet capture |
+| Tool | Machine | Purpose | Status |
+|---|---|---|---|
+| Nmap | Kali | Network scanning, host discovery, port enumeration | Active |
+| Metasploit | Kali | Exploitation framework (learning/lab use only) | Active |
+| Wireshark | Both | Packet capture and traffic analysis | Active |
+| Splunk Enterprise 10.4.1 | Linux Mint | SIEM - log aggregation and threat detection | Active (localhost:8000) |
+| UFW | Linux Mint | Host firewall + block logging | Active |
+| tcpdump | Linux Mint | Command-line packet capture | Active |
 
 ---
 
