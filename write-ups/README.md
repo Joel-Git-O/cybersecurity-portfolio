@@ -1,91 +1,45 @@
-# Write-ups
+# Write-ups and Published Articles
 
-Lab exercise documentation, CTF notes, and LinkedIn article drafts.
-
----
-
-## Published
-
-### Home SIEM Lab - Nmap Attack Detection via Splunk and UFW
-**Status:** Published -- Aug 5, 2026
-**Article:** [How I Detected a Network Attack in My Home Lab Using Splunk and Nmap](https://www.linkedin.com/pulse/how-i-detected-network-attack-my-home-lab-using-splunk-joel-massicot-uwoce/)
-
-What was covered:
-- Installed Splunk Enterprise 10.4.1 on Linux Mint (Mint-Target-Project1, 192.168.153.129)
-- Configured /var/log ingestion -- 76,234 events
-- Ran nmap -sV from Kali-Offense-Project1 (192.168.153.128)
-- UFW blocked and logged all port probes to /var/log/kern.log
-- SPL query isolated 10 clean UFW BLOCK events from the attacker IP
-
-SPL query:
-
-    source="/var/log/kern.log" host="joel-virtual-machine" "UFW BLOCK" SRC=192.168.153.128
+Hands-on documentation of lab exercises, blue team operations, and published technical writing.
 
 ---
 
-## Planned Write-ups
+## Published Articles
 
-| Title | Type | Status |
-|---|---|---|
-| Network Reconnaissance with Nmap - What the defender sees | Lab Write-up | Planned |
-| Metasploit detection in Splunk | Lab Write-up | Planned |
-| Custom SPL alert rules - triggering on attacker behavior | Lab Write-up | Planned |
-| File Integrity Monitoring - Building a Python FIM tool | Tool Write-up | Planned |
-| CompTIA Security+ Study Notes - Domain 2: Threats and Vulnerabilities | Study Notes | In progress |
+| Title | Platform | Date | Topic |
+|---|---|---|---|
+| [How I Detected a Network Attack in My Home Lab Using Splunk and Nmap](https://www.linkedin.com/pulse/how-i-detected-network-attack-my-home-lab-using-splunk-joel-massicot-uwoce/) | LinkedIn | Aug 5, 2026 | SIEM, Nmap, UFW, Blue Team |
 
----
+### Article Summary: How I Detected a Network Attack in My Home Lab Using Splunk and Nmap
 
-## CTF Notes
+Full end-to-end blue team exercise covering:
 
-*Hack The Box (HTB) write-ups will be added here as exercises are completed.*
+- **Lab setup:** Kali Linux (attacker, 192.168.153.128) vs Linux Mint (defender, 192.168.153.129), VMware host-only isolation
+- **Exercise 1:** Nmap reconnaissance scan from Kali targeting Mint
+- **Exercise 2:** UFW firewall blocking and logging the Nmap traffic
+- **Exercise 3:** Splunk SIEM ingestion of 76,234 /var/log events, SPL query isolating 10 UFW BLOCK events from the Kali source IP
 
-Account: HTB active (joel.massicot@zohomail.eu)
+**SPL Detection Query:**
+```
+index=main sourcetype=syslog "UFW BLOCK" src_ip=192.168.153.128
+```
 
----
-
-## Resources
-
-- [Hack The Box](https://www.hackthebox.com/)
-- [TryHackMe](https://tryhackme.com/)
-- [Splunk Free](https://www.splunk.com/en_us/download/splunk-enterprise.html)
-- [NIST CSF](https://www.nist.gov/cyberframework)
-# Write-ups
-
-Lab exercise documentation, CTF notes, and LinkedIn article drafts.
+Screenshots included: Splunk dashboard showing 76,234 events ingested, 56 UFW BLOCK events, and 10 events isolated to the Kali source IP.
 
 ---
 
-## In Progress
+## Lab Write-ups (In Progress)
 
-### Home SIEM Lab - Splunk on Linux Mint
-**Status:** In progress
-**Goal:** Install Splunk Free on Linux Mint, ingest system logs, detect Nmap traffic from Kali Linux, visualize in dashboards.
-**Planned article:** "How I built a home SIEM to monitor my network"
+Additional write-ups will be added as exercises are completed.
 
----
-
-## Planned Write-ups
-
-| Title | Type | Status |
-|---|---|---|
-| How I built a home SIEM to monitor my network | LinkedIn Article | Planned (post-Splunk exercise) |
-| Network Reconnaissance with Nmap - What the defender sees | Lab Write-up | Planned |
-| File Integrity Monitoring - Building a Python FIM tool | Tool Write-up | Planned |
-| CompTIA Security+ Study Notes - Domain 2: Threats & Vulnerabilities | Study Notes | In progress |
+| Topic | Status |
+|---|---|
+| SPL alert rules -- automated detection | Planned |
+| Metasploit exploitation + Splunk detection | Planned |
+| Log correlation across multiple sources | Planned |
+| Python automation for security monitoring | Planned |
+| Incident response simulation | Planned |
 
 ---
 
-## CTF Notes
-
-*Hack The Box (HTB) write-ups will be added here as exercises are completed.*
-
-Account: HTB active (joel.massicot@zohomail.eu)
-
----
-
-## Resources
-
-- [Hack The Box](https://www.hackthebox.com/)
-- [TryHackMe](https://tryhackme.com/)
-- [Splunk Free](https://www.splunk.com/en_us/download/splunk-enterprise.html)
-- [NIST CSF](https://www.nist.gov/cyberframework)
+*See [home-lab/](../home-lab/) for the full lab setup and architecture notes.*
